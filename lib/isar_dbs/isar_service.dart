@@ -9,8 +9,6 @@ class IsarService {
     isarDB = openIsarDB();
   }
 
-  UserDetails userDetails = UserDetails();
-
   Future<Isar> openIsarDB() async {
     final dir = await getApplicationDocumentsDirectory();
     if (Isar.instanceNames.isEmpty) {
