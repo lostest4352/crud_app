@@ -30,7 +30,7 @@ class UserDatabase extends _$UserDatabase {
     yield* allUserItems;
   }
 
-  Future<int> saveData(String name, int age, String? description) async {
+  Future<int> addData(String name, int age, String? description) async {
     return await into(userItems).insert(
       UserItemsCompanion.insert(
         name: name,

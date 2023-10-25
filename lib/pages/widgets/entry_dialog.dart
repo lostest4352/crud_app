@@ -114,7 +114,7 @@ class _EntryDialogState extends State<EntryDialog> {
                           if (widget.nameController.text.trim() != "" &&
                               widget.ageController.text.trim() != "") {
                             if (widget.editMode == false) {
-                              driftService.userDatabase.saveData(
+                              driftService.userDatabase.addData(
                                   widget.nameController.text.trim(),
                                   int.parse(widget.ageController.text.trim()),
                                   widget.descriptionController.text.trim());
