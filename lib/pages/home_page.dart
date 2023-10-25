@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:testapp1/isar_dbs/isar_service.dart';
-import 'package:testapp1/isar_dbs/user_details_isar.dart';
+import 'package:testapp1/database/drift_service.dart';
+import 'package:testapp1/database/users_db.dart';
 import 'package:testapp1/main.dart';
 import 'package:testapp1/pages/widgets/entry_dialog.dart';
 
@@ -13,13 +12,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  IsarService isarService = getIt.get<IsarService>();
+  DriftService driftService = getIt.get<DriftService>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  Stream<List<UserDetails>> get getIsarData => isarService.listenToData();
+  Stream<List<UserItem>> get getDriftData =>
+      driftService.userDatabase.listenToData();
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Expanded(
                 child: StreamBuilder(
-                  stream: getIsarData,
+                  stream: getDriftData,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                                           descriptionController,
                                       editMode: true,
                                       selectedId: snapshot.data?[index].id,
-                                      userDetails: snapshot.data?[index],
+                                      userItem: snapshot.data?[index],
                                     );
                                   },
                                 );

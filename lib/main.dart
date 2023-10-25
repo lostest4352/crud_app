@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testapp1/isar_dbs/isar_service.dart';
+import 'package:testapp1/database/drift_service.dart';
 import 'package:testapp1/pages/home_page.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -12,7 +12,7 @@ void main() {
 GetIt getIt = GetIt.instance;
 
 void setUp() {
-  getIt.registerSingleton<IsarService>(IsarService());
+  getIt.registerSingleton<DriftService>(DriftService());
 }
 
 class MyApp extends StatelessWidget {

@@ -1,7 +1,8 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:testapp1/isar_dbs/isar_service.dart';
-import 'package:testapp1/isar_dbs/user_details_isar.dart';
+import 'package:testapp1/database/drift_service.dart';
+import 'package:testapp1/database/users_db.dart';
 import 'package:testapp1/main.dart';
 import 'package:testapp1/pages/widgets/popup_textfield.dart';
 
@@ -13,7 +14,7 @@ class EntryDialog extends StatefulWidget {
     required this.descriptionController,
     required this.editMode,
     this.selectedId,
-    this.userDetails,
+    this.userItem,
   }) : super(key: key);
 
   final TextEditingController nameController;
@@ -21,7 +22,7 @@ class EntryDialog extends StatefulWidget {
   final TextEditingController descriptionController;
   final bool editMode;
   final int? selectedId;
-  final UserDetails? userDetails;
+  final UserItem? userItem;
 
   @override
   State<EntryDialog> createState() => _EntryDialogState();
@@ -31,17 +32,17 @@ class _EntryDialogState extends State<EntryDialog> {
   @override
   void initState() {
     super.initState();
-    widget.nameController.text = widget.userDetails?.name ?? "";
-    widget.ageController.text = widget.userDetails?.age.toString() ?? "";
-    widget.descriptionController.text = widget.userDetails?.description ?? "";
+    widget.nameController.text = widget.userItem?.name ?? "";
+    widget.ageController.text = widget.userItem?.age.toString() ?? "";
+    widget.descriptionController.text = widget.userItem?.description ?? "";
   }
 
   @override
   Widget build(BuildContext context) {
-    IsarService isarService = getIt.get<IsarService>();
-    Future<List<UserDetails>> getIsarData = isarService.getData();
+    DriftService driftService = getIt.get<DriftService>();
+    Future<List<UserItem>> getDriftData = driftService.userDatabase.getData();
     return FutureBuilder(
-      future: getIsarData,
+      future: getDriftData,
       builder: (context, snapshot) {
         return Dialog(
           child: SizedBox(
@@ -55,8 +56,9 @@ class _EntryDialogState extends State<EntryDialog> {
                       child: IconButton(
                         iconSize: 20,
                         onPressed: () {
-                          if (widget.userDetails != null) {
-                            isarService.deleteData(widget.userDetails!);
+                          if (widget.userItem != null) {
+                            driftService.userDatabase
+                                .deleteData(widget.userItem!.id);
                             Navigator.pop(context);
                           }
                         },
@@ -109,25 +111,27 @@ class _EntryDialogState extends State<EntryDialog> {
                         onPressed: () {
                           if (widget.nameController.text.trim() != "" &&
                               widget.ageController.text.trim() != "") {
-                            final userDetails = UserDetails()
-                              ..name = widget.nameController.text.trim()
-                              ..age =
-                                  int.parse(widget.ageController.text.trim())
-                              ..description =
-                                  widget.descriptionController.text.trim();
-
                             if (widget.editMode == false) {
-                              isarService.saveData(userDetails);
-                              if (!context.mounted) return;
+                              driftService.userDatabase.saveData(
+                                  widget.nameController.text.trim(),
+                                  int.parse(widget.ageController.text.trim()),
+                                  widget.descriptionController.text.trim());
+
                               Navigator.pop(context);
                             } else {
-                              isarService.editData(
-                                widget.selectedId!,
-                                widget.nameController.text.trim(),
-                                int.parse(widget.ageController.text.trim()),
-                                widget.descriptionController.text.trim(),
+                              final newUserItem = UserItemsCompanion(
+                                id: Value.ofNullable(widget.selectedId),
+                                name: Value.ofNullable(
+                                  widget.nameController.text.trim(),
+                                ),
+                                age: Value.ofNullable(int.parse(
+                                    widget.ageController.text.trim())),
+                                description: Value.ofNullable(
+                                    widget.descriptionController.text.trim()),
                               );
-                              //
+
+                              driftService.userDatabase.updateData(newUserItem);
+
                               if (!context.mounted) return;
                               Navigator.pop(context);
                             }
