@@ -23,8 +23,8 @@ class IsarService {
 
   Future<List<UserDetails>> getData() async {
     final isar = await isarDB;
-    final gn = isar.userDetails.where().findAll();
-    return gn;
+    final getUserDetailsData = isar.userDetails.where().findAll();
+    return getUserDetailsData;
   }
 
   Stream<List<UserDetails>> listenToData() async* {
