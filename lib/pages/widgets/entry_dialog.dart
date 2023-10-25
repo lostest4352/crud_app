@@ -28,6 +28,9 @@ class EntryDialog extends StatefulWidget {
 }
 
 class _EntryDialogState extends State<EntryDialog> {
+  IsarService isarService = getIt.get<IsarService>();
+  Future<List<UserDetails>> get getIsarData => isarService.getData();
+
   @override
   void initState() {
     super.initState();
@@ -38,8 +41,6 @@ class _EntryDialogState extends State<EntryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    IsarService isarService = getIt.get<IsarService>();
-    Future<List<UserDetails>> getIsarData = isarService.getData();
     return FutureBuilder(
       future: getIsarData,
       builder: (context, snapshot) {
