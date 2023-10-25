@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:testapp1/isar_dbs/user_details_isar.dart';
 
-class IsarService with ChangeNotifier {
+class IsarService {
   late Future<Isar> isarDB;
 
   IsarService() {
@@ -21,7 +20,6 @@ class IsarService with ChangeNotifier {
         inspector: true,
       );
     }
-
     return Future.value(Isar.getInstance());
   }
 
