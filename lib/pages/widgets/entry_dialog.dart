@@ -29,6 +29,10 @@ class EntryDialog extends StatefulWidget {
 }
 
 class _EntryDialogState extends State<EntryDialog> {
+  DriftService driftService = getIt.get<DriftService>();
+  Future<List<UserItem>> get getDriftData =>
+      driftService.userDatabase.getData();
+
   @override
   void initState() {
     super.initState();
@@ -39,8 +43,6 @@ class _EntryDialogState extends State<EntryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    DriftService driftService = getIt.get<DriftService>();
-    Future<List<UserItem>> getDriftData = driftService.userDatabase.getData();
     return FutureBuilder(
       future: getDriftData,
       builder: (context, snapshot) {
