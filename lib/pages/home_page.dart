@@ -40,6 +40,23 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("App"),
       ),
+      drawer: Drawer(
+        child: StreamBuilder(
+            stream: getIsarData.asBroadcastStream(),
+            builder: (context, snapshot) {
+              return Column(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      isarService.closeDB();
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Delete DB"),
+                  ),
+                ],
+              );
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
@@ -68,6 +85,11 @@ class _HomePageState extends State<HomePage> {
                       return const Center(
                         child: Text("No data yet"),
                       );
+                    }
+                    if (snapshot.data != null) {
+                      if (snapshot.data!.isEmpty) {
+                        isarService.defaultSave();
+                      }
                     }
 
                     return ListView.builder(

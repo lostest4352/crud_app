@@ -12,12 +12,14 @@ class IsarService {
   Future<Isar> openIsarDB() async {
     final dir = await getApplicationDocumentsDirectory();
     if (Isar.instanceNames.isEmpty) {
-      return await Isar.open(
+      final isar = await Isar.open(
         [UserDetailsSchema],
         directory: dir.path,
         inspector: true,
       );
+      return isar;
     }
+
     return Future.value(Isar.getInstance());
   }
 
@@ -36,6 +38,18 @@ class IsarService {
     final isar = await isarDB;
     isar.writeTxn(() async {
       isar.userDetails.put(userDetails);
+    });
+  }
+
+  Future<void> defaultSave() async {
+    final isar = await isarDB;
+
+    UserDetails userDetails2 = UserDetails()
+      ..age = 77
+      ..name = "default name"
+      ..description = 'default description';
+    isar.writeTxn(() async {
+      isar.userDetails.put(userDetails2);
     });
   }
 
@@ -65,5 +79,10 @@ class IsarService {
     isar.writeTxn(() async {
       isar.clear();
     });
+  }
+
+  closeDB() async {
+    final isar = await isarDB;
+    isar.close(deleteFromDisk: true);
   }
 }
