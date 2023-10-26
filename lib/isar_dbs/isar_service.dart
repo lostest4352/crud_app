@@ -45,9 +45,9 @@ class IsarService {
     final isar = await isarDB;
 
     UserDetails userDetails2 = UserDetails()
-      ..age = 77
-      ..name = "default name"
-      ..description = 'default description';
+      ..age = 20
+      ..name = "default"
+      ..description = "";
     isar.writeTxn(() async {
       isar.userDetails.put(userDetails2);
     });
