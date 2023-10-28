@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:testapp1/database/drift_service.dart';
 import 'package:testapp1/database/users_db.dart';
 import 'package:testapp1/main.dart';
 import 'package:testapp1/pages/widgets/entry_dialog.dart';
@@ -12,14 +11,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DriftService driftService = getIt.get<DriftService>();
+  UserDatabase driftService = getIt.get<UserDatabase>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  Stream<List<UserItem>> get getDriftData =>
-      driftService.userDatabase.listenToData();
+  Stream<List<UserItem>> get getDriftData => driftService.listenToData();
 
   @override
   void initState() {

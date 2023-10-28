@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:testapp1/database/drift_service.dart';
 import 'package:testapp1/database/users_db.dart';
 import 'package:testapp1/main.dart';
 import 'package:testapp1/pages/widgets/popup_textfield.dart';
@@ -29,9 +28,8 @@ class EntryDialog extends StatefulWidget {
 }
 
 class _EntryDialogState extends State<EntryDialog> {
-  DriftService driftService = getIt.get<DriftService>();
-  Future<List<UserItem>> get getDriftData =>
-      driftService.userDatabase.getData();
+  UserDatabase driftService = getIt.get<UserDatabase>();
+  Future<List<UserItem>> get getDriftData => driftService.getData();
 
   @override
   void initState() {
@@ -59,8 +57,7 @@ class _EntryDialogState extends State<EntryDialog> {
                         iconSize: 20,
                         onPressed: () {
                           if (widget.userItem != null) {
-                            driftService.userDatabase
-                                .deleteData(widget.userItem!.id);
+                            driftService.deleteData(widget.userItem!.id);
                             Navigator.pop(context);
                           }
                         },
@@ -114,7 +111,7 @@ class _EntryDialogState extends State<EntryDialog> {
                           if (widget.nameController.text.trim() != "" &&
                               widget.ageController.text.trim() != "") {
                             if (widget.editMode == false) {
-                              driftService.userDatabase.addData(
+                              driftService.addData(
                                   widget.nameController.text.trim(),
                                   int.parse(widget.ageController.text.trim()),
                                   widget.descriptionController.text.trim());
@@ -132,7 +129,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                     widget.descriptionController.text.trim()),
                               );
 
-                              driftService.userDatabase.updateData(newUserItem);
+                              driftService.updateData(newUserItem);
 
                               if (!context.mounted) return;
                               Navigator.pop(context);
