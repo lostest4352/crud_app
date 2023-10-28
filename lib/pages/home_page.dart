@@ -11,12 +11,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  UserDatabase driftService = getIt.get<UserDatabase>();
-
   TextEditingController nameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  UserDatabase driftService = getIt.get<UserDatabase>();
   Stream<List<UserItem>> get getDriftData => driftService.listenToData();
 
   @override

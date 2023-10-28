@@ -10,7 +10,6 @@ void main() {
 }
 
 GetIt getIt = GetIt.instance;
-
 void setUp() {
   getIt.registerSingleton<UserDatabase>(UserDatabase());
 }
