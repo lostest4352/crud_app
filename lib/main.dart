@@ -9,7 +9,7 @@ void main() {
   runApp(const MyApp());
 }
 
-GetIt getIt = GetIt.instance;
+final GetIt getIt = GetIt.instance;
 void setUp() {
   getIt.registerSingleton<UserDatabase>(UserDatabase());
 }
