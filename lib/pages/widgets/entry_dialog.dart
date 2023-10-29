@@ -115,7 +115,6 @@ class _EntryDialogState extends State<EntryDialog> {
                                   widget.nameController.text.trim(),
                                   int.parse(widget.ageController.text.trim()),
                                   widget.descriptionController.text.trim());
-
                               Navigator.pop(context);
                             } else {
                               final newUserItem = UserItemsCompanion(
@@ -128,10 +127,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                 description: Value.ofNullable(
                                     widget.descriptionController.text.trim()),
                               );
-
                               driftService.updateData(newUserItem);
-
-                              if (!context.mounted) return;
                               Navigator.pop(context);
                             }
                           }
