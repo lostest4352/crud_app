@@ -15,8 +15,8 @@ class _HomePageState extends State<HomePage> {
   TextEditingController ageController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  UserDatabase driftService = getIt.get<UserDatabase>();
-  Stream<List<UserItem>> get getDriftData => driftService.listenToData();
+  UserDatabase driftDB = getIt.get<UserDatabase>();
+  Stream<List<UserItem>> get getDriftData => driftDB.listenToData();
 
   @override
   void initState() {

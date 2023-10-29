@@ -28,8 +28,8 @@ class EntryDialog extends StatefulWidget {
 }
 
 class _EntryDialogState extends State<EntryDialog> {
-  UserDatabase driftService = getIt.get<UserDatabase>();
-  Future<List<UserItem>> get getDriftData => driftService.getData();
+  UserDatabase driftDB = getIt.get<UserDatabase>();
+  Future<List<UserItem>> get getDriftData => driftDB.getData();
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _EntryDialogState extends State<EntryDialog> {
                         iconSize: 20,
                         onPressed: () {
                           if (widget.userItem != null) {
-                            driftService.deleteData(widget.userItem!.id);
+                            driftDB.deleteData(widget.userItem!.id);
                             Navigator.pop(context);
                           }
                         },
@@ -111,7 +111,7 @@ class _EntryDialogState extends State<EntryDialog> {
                           if (widget.nameController.text.trim() != "" &&
                               widget.ageController.text.trim() != "") {
                             if (widget.editMode == false) {
-                              driftService.addData(
+                              driftDB.addData(
                                   widget.nameController.text.trim(),
                                   int.parse(widget.ageController.text.trim()),
                                   widget.descriptionController.text.trim());
@@ -127,7 +127,7 @@ class _EntryDialogState extends State<EntryDialog> {
                                 description: Value.ofNullable(
                                     widget.descriptionController.text.trim()),
                               );
-                              driftService.updateData(newUserItem);
+                              driftDB.updateData(newUserItem);
                               Navigator.pop(context);
                             }
                           }
