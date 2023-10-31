@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:testapp1/database/users_db.dart';
 import 'package:testapp1/pages/home_page.dart';
 
 void main() {
-  setUp();
+  // setUp();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
-}
-
-final GetIt getIt = GetIt.instance;
-void setUp() {
-  getIt.registerSingleton<UserDatabase>(UserDatabase());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,21 +15,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const HomePage(),
-        theme: ThemeData.dark(),
-      ),
-      // child: MultiProvider(
-      //   providers: [],
-      //   builder: (context, child) {
-      //     return MaterialApp(
-      //       debugShowCheckedModeBanner: false,
-      //       home: const HomePage(),
-      //       theme: ThemeData.dark(),
-      //     );
-      //   },
+      // child: MaterialApp(
+      //   debugShowCheckedModeBanner: false,
+      //   home: const HomePage(),
+      //   theme: ThemeData.dark(),
       // ),
+      child: MultiProvider(
+        providers: [
+          Provider(
+            create: (context) {
+              return UserDatabase();
+            },
+          ),
+          StreamProvider<List<UserItem>>(
+            create: (context) {
+              return context.read<UserDatabase>().listenToData();
+            },
+            initialData: const [],
+          ),
+        ],
+        builder: (context, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: const HomePage(),
+            theme: ThemeData.dark(),
+          );
+        },
+      ),
     );
   }
 }

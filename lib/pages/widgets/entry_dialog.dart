@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:testapp1/database/users_db.dart';
-import 'package:testapp1/main.dart';
 import 'package:testapp1/pages/widgets/popup_textfield.dart';
 
 class EntryDialog extends StatefulWidget {
@@ -28,8 +28,9 @@ class EntryDialog extends StatefulWidget {
 }
 
 class _EntryDialogState extends State<EntryDialog> {
-  UserDatabase driftDB = getIt.get<UserDatabase>();
-  Future<List<UserItem>> get getDriftData => driftDB.getData();
+  // UserDatabase driftDB = getIt.get<UserDatabase>();
+  UserDatabase get driftDB => context.read<UserDatabase>();
+  
 
   @override
   void initState() {
@@ -41,9 +42,9 @@ class _EntryDialogState extends State<EntryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getDriftData,
-      builder: (context, snapshot) {
+    return Consumer<List<UserItem>>(
+      // future: getDriftData,
+      builder: (context, value, child) {
         return Dialog(
           child: SizedBox(
             height: 250,
