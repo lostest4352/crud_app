@@ -16,14 +16,6 @@ class _HomePageState extends State<HomePage> {
   TextEditingController ageController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  // UserDatabase driftDB = getIt.get<UserDatabase>();
-  // Stream<List<UserItem>> get getDriftData => driftDB.listenToData();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   void dispose() {
     nameController.dispose();
@@ -70,14 +62,7 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                 child: Consumer<List<UserItem>>(
-                  // stream: getDriftData,
                   builder: (context, value, child) {
-                    // if (!snapshot.hasData) {
-                    //   return const Center(
-                    //     child: Text("No data yet"),
-                    //   );
-                    // }
-
                     return ListView.builder(
                       itemCount: value.length,
                       itemBuilder: (context, index) {
