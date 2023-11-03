@@ -34,31 +34,6 @@ class _ListPageState extends State<ListPage> {
     },
   ];
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: const Text("List page"),
-  //     ),
-  //     body: () {
-  //       dataSet.sort((a, b) => b['time']!.compareTo(a['time']!));
-
-  //       final groupByMonth =
-  //           groupBy(dataSet, (obj) => obj['time']?.substring(0, 7));
-
-  //       for (final month in groupByMonth.keys) {
-  //         return Column(
-  //           children: [
-  //             ListTile(
-  //               title: Text(month ?? ""),
-  //             ),
-  //           ],
-  //         );
-  //       }
-  //     }(),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     dataSet.sort((a, b) => b['time']!.compareTo(a['time']!));
@@ -70,26 +45,71 @@ class _ListPageState extends State<ListPage> {
       appBar: AppBar(
         title: Text('Grouped Data'),
       ),
-      body: ListView(
-        children: groupByMonth.keys.map((month) {
-          final monthGroupedList = groupByMonth[month];
-          final groupByDay = groupBy(
-              monthGroupedList!, (obj) => obj['time']?.substring(0, 10));
 
+      // body: ListView.builder(
+      //   itemCount: groupByMonth.length,
+      //   itemBuilder: (context, index) {
+      //     final dayToList = groupByMonth.values.toList()[index];
+      //     final groupByDay =
+      //         groupBy(dayToList, (obj) => obj['time']?.substring(0, 10));
+      //     return Column(
+      //       children: [
+      //         Text(groupByMonth.keys.toList()[index] ?? ""),
+      //         Column(
+      //           children: [
+      //             SizedBox(
+      //               height: groupByMonth.length * 50,
+      //               child: ListView.builder(
+      //                 physics: NeverScrollableScrollPhysics(),
+      //                 itemCount: groupByDay.length,
+      //                 itemBuilder: (context, index) {
+      //                   final listVal = groupByDay.values.toList()[index];
+      //                   return Column(
+      //                     children: [
+      //                       SizedBox(
+      //                         height: groupByDay.length * 100,
+      //                         child: ListView.builder(
+      //                           physics: NeverScrollableScrollPhysics(),
+      //                           itemCount: listVal.length,
+      //                           itemBuilder: (context, index) {
+      //                             return ListTile(
+      //                               title: Text(listVal[index]["time"] ?? ""),
+      //                               subtitle:
+      //                                   Text(listVal[index]["message"] ?? ""),
+      //                             );
+      //                           },
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   );
+      //                 },
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // ),
+
+      body: ListView(
+        children: groupByMonth.entries.map((entry) {
+          final month = entry.key;
+          final monthGroupedList = entry.value;
+          final groupByDay =
+              groupBy(monthGroupedList, (obj) => obj['time']?.substring(0, 10));
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('$month:'),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: groupByDay.keys.map((day) {
-                  final dayGroupedlist = groupByDay[day];
-
+                children: groupByDay.entries.map((entry) {
+                  final day = entry.key;
+                  final dayGroupedlist = entry.value;
                   return Column(
                     children: [
                       Text('$day:'),
                       Column(
-                        children: dayGroupedlist!.map((listItem) {
+                        children: dayGroupedlist.map((listItem) {
                           return Text(
                               '${listItem["time"]}, ${listItem["message"]}');
                         }).toList(),
