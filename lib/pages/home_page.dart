@@ -41,17 +41,21 @@ class _HomePageState extends State<HomePage> {
         title: const Text("App"),
       ),
       drawer: Drawer(
-        child: Column(
-          children: [
-            TextButton(
-              onPressed: () {
-                isarService.closeDB();
-                Navigator.pop(context);
-              },
-              child: const Text("Delete DB"),
-            ),
-          ],
-        ),
+        child: StreamBuilder(
+            stream: getIsarData.asBroadcastStream(),
+            builder: (context, snapshot) {
+              return Column(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      isarService.closeDB();
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Delete DB"),
+                  ),
+                ],
+              );
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
