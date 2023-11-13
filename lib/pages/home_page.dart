@@ -73,7 +73,6 @@ class _HomePageState extends State<HomePage> {
                       builder: (context, value, child) {
                         if (value.isEmpty) {
                           driftDB.addDefaultData();
-                          debugPrint(value.length.toString());
                         }
                         return ListView.builder(
                           itemCount: value.length,
