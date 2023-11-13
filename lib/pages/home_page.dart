@@ -65,55 +65,47 @@ class _HomePageState extends State<HomePage> {
                 title: const Text("Go to list page"),
               ),
               Expanded(
-                child: StreamProvider<List<UserItem>?>.value(
-                  value: context.read<UserDatabase>().listenToData(),
-                  initialData: null,
-                  builder: (context, child) {
-                    return Consumer<List<UserItem>?>(
-                      builder: (context, value, child) {
-                        if (value == null) {
-                          return const Center(
-                            child: Text('No data'),
-                          );
-                        }
-                        if (value.isEmpty) {
-                          driftDB.addDefaultData();
-                        }
-                        return ListView.builder(
-                          itemCount: value.length,
-                          itemBuilder: (context, index) {
-                            debugPrint("length is");
-                            return Column(
-                              children: [
-                                ListTile(
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return EntryDialog(
-                                          nameController: nameController,
-                                          ageController: ageController,
-                                          descriptionController:
-                                              descriptionController,
-                                          editMode: true,
-                                          selectedId: value[index].id,
-                                          userItem: value[index],
-                                        );
-                                      },
+                child: Consumer<List<UserItem>?>(
+                  builder: (context, value, child) {
+                    if (value == null) {
+                      return const Center(
+                        child: Text('No data'),
+                      );
+                    }
+                    if (value.isEmpty) {
+                      driftDB.addDefaultData();
+                    }
+                    return ListView.builder(
+                      itemCount: value.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return EntryDialog(
+                                      nameController: nameController,
+                                      ageController: ageController,
+                                      descriptionController:
+                                          descriptionController,
+                                      editMode: true,
+                                      selectedId: value[index].id,
+                                      userItem: value[index],
                                     );
                                   },
-                                  title: Text(value[index].name),
-                                  subtitle:
-                                      Text(value[index].description ?? ""),
-                                  leading: CircleAvatar(
-                                    child: Text(
-                                      value[index].age.toString(),
-                                    ),
-                                  ),
+                                );
+                              },
+                              title: Text(value[index].name),
+                              subtitle: Text(value[index].description ?? ""),
+                              leading: CircleAvatar(
+                                child: Text(
+                                  value[index].age.toString(),
                                 ),
-                              ],
-                            );
-                          },
+                              ),
+                            ),
+                          ],
                         );
                       },
                     );

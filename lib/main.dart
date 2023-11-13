@@ -22,6 +22,12 @@ class MyApp extends StatelessWidget {
               return UserDatabase();
             },
           ),
+          StreamProvider<List<UserItem>?>(
+            create: (context) {
+              return context.read<UserDatabase>().listenToData();
+            },
+            initialData: null,
+          ),
         ],
         builder: (context, child) {
           return MaterialApp(
