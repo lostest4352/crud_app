@@ -65,12 +65,17 @@ class _HomePageState extends State<HomePage> {
                 title: const Text("Go to list page"),
               ),
               Expanded(
-                child: StreamProvider<List<UserItem>>.value(
+                child: StreamProvider<List<UserItem>?>.value(
                   value: context.read<UserDatabase>().listenToData(),
-                  initialData: const [UserItem(id: 0, name: '', age: 0)],
+                  initialData: null,
                   builder: (context, child) {
-                    return Consumer<List<UserItem>>(
+                    return Consumer<List<UserItem>?>(
                       builder: (context, value, child) {
+                        if (value == null) {
+                          return const Center(
+                            child: Text('No data'),
+                          );
+                        }
                         if (value.isEmpty) {
                           driftDB.addDefaultData();
                         }
