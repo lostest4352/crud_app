@@ -15,23 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      // child: MaterialApp(
-      //   debugShowCheckedModeBanner: false,
-      //   home: const HomePage(),
-      //   theme: ThemeData.dark(),
-      // ),
       child: MultiProvider(
         providers: [
           Provider(
             create: (context) {
               return UserDatabase();
             },
-          ),
-          StreamProvider<List<UserItem>>(
-            create: (context) {
-              return context.read<UserDatabase>().listenToData();
-            },
-            initialData: const [],
           ),
         ],
         builder: (context, child) {

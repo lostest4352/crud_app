@@ -16,6 +16,8 @@ class _HomePageState extends State<HomePage> {
   TextEditingController ageController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  UserDatabase get driftDB => context.read<UserDatabase>();
+
   @override
   void dispose() {
     nameController.dispose();
@@ -52,48 +54,62 @@ class _HomePageState extends State<HomePage> {
             children: [
               ListTile(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) {
-                      return const ListPage();
-                    },
-                  ));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const ListPage();
+                      },
+                    ),
+                  );
                 },
                 title: const Text("Go to list page"),
               ),
               Expanded(
-                child: Consumer<List<UserItem>>(
-                  builder: (context, value, child) {
-                    return ListView.builder(
-                      itemCount: value.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            ListTile(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return EntryDialog(
-                                      nameController: nameController,
-                                      ageController: ageController,
-                                      descriptionController:
-                                          descriptionController,
-                                      editMode: true,
-                                      selectedId: value[index].id,
-                                      userItem: value[index],
+                child: StreamProvider<List<UserItem>>.value(
+                  value: context.read<UserDatabase>().listenToData(),
+                  initialData: const [UserItem(id: 0, name: '', age: 0)],
+                  builder: (context, child) {
+                    return Consumer<List<UserItem>>(
+                      builder: (context, value, child) {
+                        if (value.isEmpty) {
+                          driftDB.addDefaultData();
+                          debugPrint(value.length.toString());
+                        }
+                        return ListView.builder(
+                          itemCount: value.length,
+                          itemBuilder: (context, index) {
+                            debugPrint("length is");
+                            return Column(
+                              children: [
+                                ListTile(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return EntryDialog(
+                                          nameController: nameController,
+                                          ageController: ageController,
+                                          descriptionController:
+                                              descriptionController,
+                                          editMode: true,
+                                          selectedId: value[index].id,
+                                          userItem: value[index],
+                                        );
+                                      },
                                     );
                                   },
-                                );
-                              },
-                              title: Text(value[index].name),
-                              subtitle: Text(value[index].description ?? ""),
-                              leading: CircleAvatar(
-                                child: Text(
-                                  value[index].age.toString(),
+                                  title: Text(value[index].name),
+                                  subtitle:
+                                      Text(value[index].description ?? ""),
+                                  leading: CircleAvatar(
+                                    child: Text(
+                                      value[index].age.toString(),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              ],
+                            );
+                          },
                         );
                       },
                     );

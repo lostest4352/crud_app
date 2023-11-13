@@ -40,6 +40,26 @@ class UserDatabase extends _$UserDatabase {
     );
   }
 
+  Future<int> addDefaultData() async {
+    return await into(userItems).insert(
+      UserItemsCompanion.insert(
+        name: 'name',
+        age: 22,
+      ),
+    );
+  }
+
+  //
+  Future<void> deleteAllData() async {
+    return transaction(() async {
+      // you only need this if you've manually enabled foreign keys
+      // await customStatement('PRAGMA foreign_keys = OFF');
+      for (final table in allTables) {
+        await delete(table).go();
+      }
+    });
+  }
+
   Future<bool> updateData(UserItemsCompanion userItemsCompanion) async {
     return await update(userItems).replace(userItemsCompanion);
   }
