@@ -8,17 +8,11 @@ import 'package:testapp1/pages/widgets/popup_textfield.dart';
 class EntryDialog extends StatefulWidget {
   const EntryDialog({
     Key? key,
-    required this.nameController,
-    required this.ageController,
-    required this.descriptionController,
     required this.editMode,
     this.selectedId,
     this.userItem,
   }) : super(key: key);
 
-  final TextEditingController nameController;
-  final TextEditingController ageController;
-  final TextEditingController descriptionController;
   final bool editMode;
   final int? selectedId;
   final UserItem? userItem;
@@ -31,12 +25,24 @@ class _EntryDialogState extends State<EntryDialog> {
   // UserDatabase driftDB = getIt.get<UserDatabase>();
   UserDatabase get driftDB => context.read<UserDatabase>();
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    widget.nameController.text = widget.userItem?.name ?? "";
-    widget.ageController.text = widget.userItem?.age.toString() ?? "";
-    widget.descriptionController.text = widget.userItem?.description ?? "";
+    nameController.text = widget.userItem?.name ?? "";
+    ageController.text = widget.userItem?.age.toString() ?? "";
+    descriptionController.text = widget.userItem?.description ?? "";
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    ageController.dispose();
+    descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,11 +74,11 @@ class _EntryDialogState extends State<EntryDialog> {
               }
             }(),
             PopupTextField(
-              textEditingController: widget.nameController,
+              textEditingController: nameController,
               labelText: "Enter your name",
             ),
             PopupTextField(
-              textEditingController: widget.ageController,
+              textEditingController: ageController,
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
@@ -80,7 +86,7 @@ class _EntryDialogState extends State<EntryDialog> {
               labelText: "Enter your age",
             ),
             PopupTextField(
-              textEditingController: widget.descriptionController,
+              textEditingController: descriptionController,
               labelText: "Give description",
             ),
             Padding(
@@ -105,24 +111,24 @@ class _EntryDialogState extends State<EntryDialog> {
                       backgroundColor: Colors.blue,
                     ),
                     onPressed: () {
-                      if (widget.nameController.text.trim() != "" &&
-                          widget.ageController.text.trim() != "") {
+                      if (nameController.text.trim() != "" &&
+                          ageController.text.trim() != "") {
                         if (widget.editMode == false) {
                           driftDB.addData(
-                              widget.nameController.text.trim(),
-                              int.parse(widget.ageController.text.trim()),
-                              widget.descriptionController.text.trim());
+                              nameController.text.trim(),
+                              int.parse(ageController.text.trim()),
+                              descriptionController.text.trim());
                           Navigator.pop(context);
                         } else {
                           final newUserItem = UserItemsCompanion(
                             id: Value.ofNullable(widget.selectedId),
                             name: Value.ofNullable(
-                              widget.nameController.text.trim(),
+                              nameController.text.trim(),
                             ),
                             age: Value.ofNullable(
-                                int.parse(widget.ageController.text.trim())),
+                                int.parse(ageController.text.trim())),
                             description: Value.ofNullable(
-                                widget.descriptionController.text.trim()),
+                                descriptionController.text.trim()),
                           );
                           driftDB.updateData(newUserItem);
                           Navigator.pop(context);

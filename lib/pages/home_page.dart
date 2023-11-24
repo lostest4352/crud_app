@@ -12,19 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-
   UserDatabase get driftDB => context.read<UserDatabase>();
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    ageController.dispose();
-    descriptionController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +26,7 @@ class _HomePageState extends State<HomePage> {
           showDialog(
             context: context,
             builder: (context) {
-              return EntryDialog(
-                nameController: nameController,
-                ageController: ageController,
-                descriptionController: descriptionController,
+              return const EntryDialog(
                 editMode: false,
               );
             },
@@ -86,10 +71,6 @@ class _HomePageState extends State<HomePage> {
                                   context: context,
                                   builder: (context) {
                                     return EntryDialog(
-                                      nameController: nameController,
-                                      ageController: ageController,
-                                      descriptionController:
-                                          descriptionController,
                                       editMode: true,
                                       selectedId: value[index].id,
                                       userItem: value[index],

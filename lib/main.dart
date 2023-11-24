@@ -4,7 +4,6 @@ import 'package:testapp1/database/users_db.dart';
 import 'package:testapp1/pages/home_page.dart';
 
 void main() {
-  // setUp();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
