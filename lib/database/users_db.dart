@@ -76,7 +76,10 @@ class UserDatabase extends _$UserDatabase {
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
+    final docDir = await getApplicationDocumentsDirectory();
+    // final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final dbFolder = Directory(p.join(docDir.path, 'test_app'));
+    await dbFolder.create(recursive: true);
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
     debugPrint(dbFolder.path);
     return NativeDatabase.createInBackground(file);
